@@ -1,7 +1,16 @@
 const express = require('express');
+const morgan = require('morgan');
 app = express();
 
+morgan.token('data', (req, res) => {
+    if (req.method === 'GET') {
+        return res.statusMessage;
+    }
+})
+
+
 app.use(express.json());
+app.use(morgan('tiny'))
 
 const persons = [
     { 
@@ -28,7 +37,9 @@ const persons = [
 
 // Get all persons from server
 app.get('/api/persons', (req, res) => {
+    // Log valuable details of each request using morgan
     res.json(persons);
+
 })
 
 
@@ -57,6 +68,29 @@ app.delete('api/persons/:id', (req, res) => {
     const id = req.params.id;
     persons = persons.filter(p => p.id != id);
     res.status(204).send(`<h2>Person ${id} has succesfully been deleted</h2>`);
+})
+
+
+// Create a new resource(person)
+app.post('api/persons', (req, res) => {
+    const name = req.name;
+    const number = req.number;
+
+    if (!name || !number) {
+        return res.status(404).json({error: 'name or number missing'})
+    }
+
+    if (persons.find(p => p.name === name)) {
+        return res.status(403).json({error: 'name must be unique'})
+    }
+
+    const person = {
+        id: Math.random() * 1000000,
+        name: name,
+        number: number
+    }
+    persons.concat(person);
+    res.json(person);
 })
 
 
