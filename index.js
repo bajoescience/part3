@@ -31,6 +31,14 @@ app.get('/api/persons', (req, res) => {
     res.json(persons);
 })
 
+// Get the number of entries from the phonebook
+app.get('/info', (req, res) => {
+    let datenow = new Date();
+    console.log(datenow);
+    res.send(`<div><p>Phonebook has info for ${persons.length} people</p> <p>${datenow}</p></div>`)
+    res.send()
+})
+
 // Set app to listen on port 3001
 const PORT = 3001;
 app.listen(PORT, () => {
