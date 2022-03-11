@@ -3,8 +3,12 @@ const morgan = require('morgan');
 app = express();
 
 morgan.token('data', (req, res) => {
-    if (req.method === 'POSt') {
-        return req.body;
+    if (req.method === 'POST') {
+        const name = {
+            name: req.body.name,
+            number: req.body.number
+        }
+        return name;
     }
 })
 
