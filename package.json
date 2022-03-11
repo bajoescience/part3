@@ -6,11 +6,17 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "fix:bug": "cd ../exercises/part2/phonebook && rm -rf node_modules && rm -rf package-lock.json && npm cache clean --force && npm install",
+    "build:ui": "rm -rf build && cd ../exercises/part2/phonebook && npm run build && cp -r build ..../parts3",
+    "deploy": "git push heroku HEAD:master",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
+    "logs:prod": "heroku logs --tail"
   },
   "author": "Bola-Ajayi-Joseph",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.3",
     "morgan": "^1.10.0"
   },

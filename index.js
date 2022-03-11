@@ -3,14 +3,15 @@ const morgan = require('morgan');
 app = express();
 
 morgan.token('data', (req, res) => {
-    if (req.method === 'GET') {
-        return res.statusMessage;
+    if (req.method === 'POSt') {
+        return req.body;
     }
 })
 
 
+app.use(express.static('build'));
 app.use(express.json());
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
 
 const persons = [
     { 
@@ -64,7 +65,7 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 // Enable the deletion of a resource through id
-app.delete('api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res) => {
     const id = req.params.id;
     persons = persons.filter(p => p.id != id);
     res.status(204).send(`<h2>Person ${id} has succesfully been deleted</h2>`);
@@ -72,7 +73,7 @@ app.delete('api/persons/:id', (req, res) => {
 
 
 // Create a new resource(person)
-app.post('api/persons', (req, res) => {
+app.post('/api/persons', (req, res) => {
     const name = req.name;
     const number = req.number;
 
@@ -95,7 +96,7 @@ app.post('api/persons', (req, res) => {
 
 
 // Set app to listen on port 3001
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server is currently running on port ${PORT}`);
 })
