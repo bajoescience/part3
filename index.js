@@ -74,8 +74,8 @@ app.delete('/api/persons/:id', (req, res) => {
 
 // Create a new resource(person)
 app.post('/api/persons', (req, res) => {
-    const name = req.name;
-    const number = req.number;
+    const name = req.body.name;
+    const number = req.body.number;
 
     if (!name || !number) {
         return res.status(404).json({error: 'name or number missing'})
